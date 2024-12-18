@@ -1,0 +1,20 @@
+﻿@model SettingsViewModel
+
+<h1>Настройки</h1>
+
+@if (@Model.IsAuthenticated || @Model.User.Role == "admin")
+{
+    <p>Настройки доступны для пользователя @Model.User.Username!</p>
+    <p>также, для пользователя @Model.User.Username доступно управление ролями:</p>
+
+    @foreach (var user in @Model.Users){
+        <form action="/User/SetAdminRole" method="post">
+            <input type="text" name="username" value="@user.Username" disabled/>
+            <input type="submit" value="задать роль админа" />
+        </form>
+    }
+}
+else
+{
+    <p>Доступ запрещен доступ!</p>
+}

@@ -1,0 +1,10 @@
+﻿@model string
+
+<h1>Регистрация</h1>
+<h2>@Model</h2>
+
+<form method="post" action="/User/Register/">
+    <input type="text" placeholder="Username" name="username" autocomplete="username" />
+    <input type="text" placeholder="Password" name="password" autocomplete="current-password" />
+    <input type="submit" value="Зарегестрироваться" />
+</form>
