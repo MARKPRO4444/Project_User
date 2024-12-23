@@ -55,9 +55,9 @@ public class UserController : Controller
             var cookieValue = UnProtectCookieValue(protectedCookieValue);
 
             settingsModel.IsAuthenticated = true;
-            settingsModel.User.Username = cookieValue;
-            HttpContext.Request.Cookies.TryGetValue("role", out var role);
-            settingsModel.User.Role = HttpContext.Request.Cookies.FirstOrDefault(x => x.Key == "role").Value;
+            settingsModel.CurrentUser.Username = cookieValue;
+            // HttpContext.Request.Cookies.TryGetValue("role", out var role);
+            settingsModel.CurrentUser.Role = HttpContext.Request.Cookies.FirstOrDefault(x => x.Key == "role").Value;
             settingsModel.Users = userContext.Users.ToList();
         }
         catch
@@ -102,7 +102,7 @@ public class UserController : Controller
     }
 
     [HttpPost]
-    public IActionResult SetAdminRole(string Username)
+    public IActionResult SetAdminRole(string Username, SettingsViewModel viewModel)
     {
         // var user = UserRepository.GetUser(Username);
         var user = UserManager.GetUser(Username, userContext);
@@ -113,7 +113,22 @@ public class UserController : Controller
             userContext.SaveChanges();
         }
 
-        return RedirectToAction("Index");
+        return RedirectToAction("Settings", viewModel);
+    }
+
+    [HttpPost]
+    public IActionResult RemoveAdminRole(string username, SettingsViewModel viewModel)
+    {
+        // var user = UserRepository.GetUser(Username);
+        var user = UserManager.GetUser(username, userContext);
+
+        if (user != null)
+        {
+            user.Role = "customer";
+            userContext.SaveChanges();
+        }
+
+        return RedirectToAction("Settings", viewModel);
     }
 
     public IActionResult Login()

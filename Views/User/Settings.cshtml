@@ -2,16 +2,34 @@
 
 <h1>Настройки</h1>
 
-@if (@Model.IsAuthenticated || @Model.User.Role == "admin")
+@if (@Model.IsAuthenticated && @Model.CurrentUser.Role == "admin")
 {
-    <p>Настройки доступны для пользователя @Model.User.Username!</p>
-    <p>также, для пользователя @Model.User.Username доступно управление ролями:</p>
+    <p>Настройки доступны для пользователя @Model.CurrentUser.Username!</p>
+    <p>также, для пользователя @Model.CurrentUser.Username доступно управление ролями:</p>
 
-    @foreach (var user in @Model.Users){
-        <form action="/User/SetAdminRole" method="post">
-            <input type="text" name="username" value="@user.Username" disabled/>
-            <input type="submit" value="задать роль админа" />
-        </form>
+    @foreach (var user in @Model.Users)
+    {
+        @if (user.Role == "customer")
+        {
+            <form class="settings" action="/User/SetAdminRole" method="post">
+                <label class="username-settings" type="text" name="username">@user.Username</label>
+                <input class="username-settings" type="text" name="username" value="@user.Username" hidden />
+                <input class="username-settings" type="text" name="IsAuthenticated" value="@Model.IsAuthenticated" hidden />
+                <input class="username-settings" type="text" asp-for="Users" hidden />
+                <input class="button-settings" type="submit" value="задать роль админа" />
+            </form>
+        }
+        else if (user.Role == "admin")
+        {
+            <form class="settings" action="/User/RemoveAdminRole" method="post">
+                <label class="username-settings" type="text" name="username">@user.Username</label>
+                <input class="username-settings" type="text" name="username" value="@user.Username" hidden />
+                <input class="username-settings" type="text" name="IsAuthenticated" value="@Model.IsAuthenticated" hidden />
+                <input class="username-settings" type="text" asp-for="Users" hidden />
+                @* <input class="username-settings" type="text" asp-for="CurrentUser" hidden /> *@
+                <input class="button-settings" type="submit" value="убрать роль админа" />
+            </form>
+        }
     }
 }
 else
