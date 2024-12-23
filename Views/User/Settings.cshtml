@@ -9,7 +9,7 @@
 
     @foreach (var user in @Model.Users)
     {
-        @if (user.Role == "customer")
+        @if (user.Role == "customer" && user.Username != Model.CurrentUser.Username)
         {
             <form class="settings" action="/User/SetAdminRole" method="post">
                 <label class="username-settings" type="text" name="username">@user.Username</label>
@@ -19,7 +19,7 @@
                 <input class="button-settings" type="submit" value="задать роль админа" />
             </form>
         }
-        else if (user.Role == "admin")
+        else if (user.Role == "admin" && user.Username != Model.CurrentUser.Username)
         {
             <form class="settings" action="/User/RemoveAdminRole" method="post">
                 <label class="username-settings" type="text" name="username">@user.Username</label>

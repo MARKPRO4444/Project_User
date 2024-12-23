@@ -74,7 +74,7 @@ public class UserController : Controller
     }
 
     [HttpPost]
-    public IActionResult Register(string Username, string password, string role = "admin")
+    public IActionResult Register(string Username, string password, string role = "customer")
     {
         //DB
 
